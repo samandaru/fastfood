@@ -15,7 +15,9 @@ export default class App extends Component {
   }
   render() {
     const onSelect = (value) => {
-      const selected = [...this.state.selected, {id: this.state.selected.length + 1}];
+      const selected = [...this.state.selected, 
+        {...value ,selectedId: this.state.selected.length},
+      ];
       this.setState({selected  });
      selected.forEach((value)=>
      this.setState({total: this.state.total + value.price})
@@ -23,11 +25,16 @@ export default class App extends Component {
     };
      const onDelete =(id)=>{
        const selected = this.state.selected.filter((value)=>{
-         value.id === id &&this.setState({total: this.state.total - value.price})
-         return value.id !== id
+         value.selectedId === id &&this.setState({total: this.state.total - value.price})
+         return value.selectedId !== id
        });
        this.setState({selected});
      
+    }
+    const onCensel = ()=>{
+      this.setState({selected:[], total: 0})
+      return
+      
     }
     return (
       <div className="wrapper">
@@ -52,7 +59,7 @@ export default class App extends Component {
             )
           })}
           </div>
-       <Order onDelete ={(id)=>onDelete(id)} data={this.state}/>
+       <Order onCensel ={()=>onCensel()}onDelete ={(id)=>onDelete(id)} data={this.state}/>
       </div>
     )
   }
